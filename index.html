@@ -6,101 +6,95 @@
 <title>EB Logística — Assistente de Migração BSoft</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap');
-  :root {
-    --bg: #0f1117; --bg2: #161b27; --bg3: #1e2535;
-    --border: rgba(255,255,255,0.07); --border2: rgba(255,255,255,0.12);
-    --text: #e8eaf0; --text2: #8b93a8; --text3: #555e72;
-    --accent: #3d6bff; --accent2: #2952d9; --accent-glow: rgba(61,107,255,0.15);
-    --green: #22c55e; --green-bg: rgba(34,197,94,0.1);
-    --amber: #f59e0b; --amber-bg: rgba(245,158,11,0.1);
-    --red: #ef4444; --red-bg: rgba(239,68,68,0.08);
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; }
-  header { background: var(--bg2); border-bottom: 1px solid var(--border); padding: 0 24px; height: 58px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
-  .logo { display: flex; align-items: center; gap: 10px; }
-  .logo-badge { width: 32px; height: 32px; background: var(--accent); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 600; color: #fff; font-family: 'DM Mono', monospace; }
-  .logo-text { font-size: 14px; font-weight: 500; color: var(--text); line-height: 1.2; }
-  .logo-sub { font-size: 11px; color: var(--text3); font-family: 'DM Mono', monospace; }
-  .header-right { display: flex; align-items: center; gap: 8px; }
-  .status-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green); box-shadow: 0 0 6px var(--green); animation: pulse 2s ease-in-out infinite; }
-  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
-  .status-label { font-size: 12px; color: var(--text2); font-family: 'DM Mono', monospace; }
-  .container { display: flex; flex: 1; height: calc(100vh - 58px); }
-  .sidebar { width: 260px; background: var(--bg2); border-right: 1px solid var(--border); display: flex; flex-direction: column; flex-shrink: 0; overflow-y: auto; }
-  .sidebar-section { padding: 16px; border-bottom: 1px solid var(--border); }
-  .sidebar-label { font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text3); font-family: 'DM Mono', monospace; margin-bottom: 10px; }
-  .member { display: flex; align-items: center; gap: 8px; padding: 6px 0; }
-  .member-avatar { width: 28px; height: 28px; border-radius: 7px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600; flex-shrink: 0; }
-  .av-j { background: linear-gradient(135deg, #3d6bff, #2952d9); color: #fff; }
-  .av-r { background: linear-gradient(135deg, #8b5cf6, #7c3aed); color: #fff; }
-  .av-u { background: linear-gradient(135deg, #14b8a6, #0d9488); color: #fff; }
-  .av-b { background: linear-gradient(135deg, #f59e0b, #d97706); color: #fff; }
-  .av-t { background: linear-gradient(135deg, #ec4899, #db2777); color: #fff; }
-  .av-ai { background: linear-gradient(135deg, #22c55e, #16a34a); color: #fff; }
-  .member-info { flex: 1; min-width: 0; }
-  .member-name { font-size: 12px; font-weight: 500; color: var(--text); }
-  .member-role { font-size: 11px; color: var(--text3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .status-indicator { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
-  .online { background: var(--green); }
-  .ai-online { background: var(--accent); box-shadow: 0 0 5px var(--accent); animation: pulse 2s infinite; }
-  .progress-block { margin-bottom: 10px; }
-  .progress-label { display: flex; justify-content: space-between; font-size: 11px; color: var(--text2); margin-bottom: 5px; }
-  .progress-bar { height: 4px; background: var(--bg3); border-radius: 2px; overflow: hidden; }
-  .progress-fill { height: 100%; border-radius: 2px; background: var(--accent); transition: width 0.8s ease; }
-  .tag-list { display: flex; flex-wrap: wrap; gap: 4px; }
-  .tag { font-size: 10px; padding: 3px 7px; border-radius: 4px; font-family: 'DM Mono', monospace; font-weight: 500; }
-  .tag-green { background: var(--green-bg); color: var(--green); }
-  .tag-amber { background: var(--amber-bg); color: var(--amber); }
-  .tag-red { background: var(--red-bg); color: var(--red); }
-  .main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
-  .chat-header { padding: 14px 20px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 10px; }
-  .chat-title { font-size: 14px; font-weight: 500; }
-  .chat-subtitle { font-size: 12px; color: var(--text3); margin-top: 1px; }
-  .messages { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 16px; }
-  .messages::-webkit-scrollbar { width: 4px; }
-  .messages::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
-  .msg { display: flex; gap: 10px; animation: fadein 0.3s ease; }
-  @keyframes fadein { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
-  .msg-avatar { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; flex-shrink: 0; margin-top: 2px; }
-  .msg-body { flex: 1; min-width: 0; }
-  .msg-meta { display: flex; align-items: baseline; gap: 7px; margin-bottom: 4px; }
-  .msg-author { font-size: 13px; font-weight: 600; color: var(--text); }
-  .msg-time { font-size: 11px; color: var(--text3); font-family: 'DM Mono', monospace; }
-  .msg-content { font-size: 14px; line-height: 1.65; color: var(--text2); }
-  .msg-content p { margin-bottom: 6px; }
-  .msg-content p:last-child { margin-bottom: 0; }
-  .msg-content strong { color: var(--text); font-weight: 500; }
-  .msg-content code { font-family: 'DM Mono', monospace; font-size: 12px; background: var(--bg3); padding: 1px 5px; border-radius: 3px; color: #7da5ff; }
-  .msg-content ul { padding-left: 16px; margin: 6px 0; }
-  .msg-content li { margin-bottom: 3px; }
-  .msg-ai .msg-content { color: var(--text); }
-  .system-msg { text-align: center; font-size: 11px; color: var(--text3); font-family: 'DM Mono', monospace; padding: 4px 0; }
-  .input-area { padding: 16px 20px; border-top: 1px solid var(--border); background: var(--bg2); }
-  .input-name-row { display: flex; gap: 8px; margin-bottom: 8px; align-items: center; }
-  .input-name-row label { font-size: 11px; color: var(--text3); font-family: 'DM Mono', monospace; white-space: nowrap; }
-  .name-select { background: var(--bg3); border: 1px solid var(--border2); border-radius: 6px; color: var(--text); font-size: 12px; padding: 4px 8px; font-family: 'DM Sans', sans-serif; outline: none; cursor: pointer; }
-  .name-select:focus { border-color: var(--accent); }
-  .input-row { display: flex; gap: 8px; align-items: flex-end; }
-  .msg-input { flex: 1; background: var(--bg3); border: 1px solid var(--border2); border-radius: 10px; color: var(--text); font-size: 14px; font-family: 'DM Sans', sans-serif; padding: 10px 14px; resize: none; outline: none; min-height: 42px; max-height: 120px; line-height: 1.5; transition: border-color 0.2s; }
-  .msg-input::placeholder { color: var(--text3); }
-  .msg-input:focus { border-color: var(--accent); }
-  .send-btn { width: 42px; height: 42px; background: var(--accent); border: none; border-radius: 10px; color: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.2s, transform 0.1s; flex-shrink: 0; }
-  .send-btn:hover { background: var(--accent2); }
-  .send-btn:active { transform: scale(0.96); }
-  .send-btn:disabled { background: var(--bg3); cursor: not-allowed; }
-  .send-btn svg { width: 18px; height: 18px; }
-  .typing-indicator { display: flex; gap: 4px; align-items: center; padding: 6px 0; }
-  .typing-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); animation: typing 1.2s ease-in-out infinite; }
-  .typing-dot:nth-child(2) { animation-delay: 0.2s; }
-  .typing-dot:nth-child(3) { animation-delay: 0.4s; }
-  @keyframes typing { 0%, 60%, 100% { transform: translateY(0); opacity: 0.4; } 30% { transform: translateY(-4px); opacity: 1; } }
-  .quick-questions { padding: 0 20px 12px; display: flex; flex-wrap: wrap; gap: 6px; }
-  .quick-btn { font-size: 12px; padding: 5px 10px; border-radius: 6px; border: 1px solid var(--border2); background: transparent; color: var(--text2); cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all 0.2s; }
-  .quick-btn:hover { border-color: var(--accent); color: var(--text); background: var(--accent-glow); }
-  .sidebar::-webkit-scrollbar { width: 4px; }
-  .sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
-  @media (max-width: 640px) { .sidebar { display: none; } }
+  :root{--bg:#0f1117;--bg2:#161b27;--bg3:#1e2535;--border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.12);--text:#e8eaf0;--text2:#8b93a8;--text3:#555e72;--accent:#3d6bff;--accent2:#2952d9;--accent-glow:rgba(61,107,255,0.15);--green:#22c55e;--green-bg:rgba(34,197,94,0.1);--amber:#f59e0b;--amber-bg:rgba(245,158,11,0.1);--red:#ef4444;--red-bg:rgba(239,68,68,0.08);}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column;}
+  header{background:var(--bg2);border-bottom:1px solid var(--border);padding:0 24px;height:58px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
+  .logo{display:flex;align-items:center;gap:10px;}
+  .logo-badge{width:32px;height:32px;background:var(--accent);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:600;color:#fff;font-family:'DM Mono',monospace;}
+  .logo-text{font-size:14px;font-weight:500;color:var(--text);line-height:1.2;}
+  .logo-sub{font-size:11px;color:var(--text3);font-family:'DM Mono',monospace;}
+  .header-right{display:flex;align-items:center;gap:8px;}
+  .status-dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green);animation:pulse 2s ease-in-out infinite;}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.5}}
+  .status-label{font-size:12px;color:var(--text2);font-family:'DM Mono',monospace;}
+  .container{display:flex;flex:1;height:calc(100vh - 58px);}
+  .sidebar{width:260px;background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0;overflow-y:auto;}
+  .sidebar-section{padding:16px;border-bottom:1px solid var(--border);}
+  .sidebar-label{font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);font-family:'DM Mono',monospace;margin-bottom:10px;}
+  .member{display:flex;align-items:center;gap:8px;padding:6px 0;}
+  .member-avatar{width:28px;height:28px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;flex-shrink:0;}
+  .av-j{background:linear-gradient(135deg,#3d6bff,#2952d9);color:#fff;}
+  .av-r{background:linear-gradient(135deg,#8b5cf6,#7c3aed);color:#fff;}
+  .av-ai2{background:linear-gradient(135deg,#f43f5e,#e11d48);color:#fff;}
+  .av-ri{background:linear-gradient(135deg,#0ea5e9,#0284c7);color:#fff;}
+  .av-u{background:linear-gradient(135deg,#14b8a6,#0d9488);color:#fff;}
+  .av-b{background:linear-gradient(135deg,#f59e0b,#d97706);color:#fff;}
+  .av-t{background:linear-gradient(135deg,#ec4899,#db2777);color:#fff;}
+  .av-ad{background:linear-gradient(135deg,#a855f7,#9333ea);color:#fff;}
+  .av-it{background:linear-gradient(135deg,#f97316,#ea580c);color:#fff;}
+  .av-ai{background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff;}
+  .member-info{flex:1;min-width:0;}
+  .member-name{font-size:12px;font-weight:500;color:var(--text);}
+  .member-role{font-size:11px;color:var(--text3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .status-indicator{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
+  .online{background:var(--green);}
+  .ai-online{background:var(--accent);box-shadow:0 0 5px var(--accent);animation:pulse 2s infinite;}
+  .progress-block{margin-bottom:10px;}
+  .progress-label{display:flex;justify-content:space-between;font-size:11px;color:var(--text2);margin-bottom:5px;}
+  .progress-bar{height:4px;background:var(--bg3);border-radius:2px;overflow:hidden;}
+  .progress-fill{height:100%;border-radius:2px;background:var(--accent);transition:width .8s ease;}
+  .tag-list{display:flex;flex-wrap:wrap;gap:4px;}
+  .tag{font-size:10px;padding:3px 7px;border-radius:4px;font-family:'DM Mono',monospace;font-weight:500;}
+  .tag-green{background:var(--green-bg);color:var(--green);}
+  .tag-amber{background:var(--amber-bg);color:var(--amber);}
+  .tag-red{background:var(--red-bg);color:var(--red);}
+  .main{flex:1;display:flex;flex-direction:column;min-width:0;}
+  .chat-header{padding:14px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;}
+  .chat-title{font-size:14px;font-weight:500;}
+  .chat-subtitle{font-size:12px;color:var(--text3);margin-top:1px;}
+  .messages{flex:1;overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:16px;}
+  .messages::-webkit-scrollbar{width:4px;}
+  .messages::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px;}
+  .msg{display:flex;gap:10px;animation:fadein .3s ease;}
+  @keyframes fadein{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+  .msg-avatar{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;flex-shrink:0;margin-top:2px;}
+  .msg-body{flex:1;min-width:0;}
+  .msg-meta{display:flex;align-items:baseline;gap:7px;margin-bottom:4px;}
+  .msg-author{font-size:13px;font-weight:600;color:var(--text);}
+  .msg-time{font-size:11px;color:var(--text3);font-family:'DM Mono',monospace;}
+  .msg-content{font-size:14px;line-height:1.65;color:var(--text2);}
+  .msg-content p{margin-bottom:6px;}
+  .msg-content p:last-child{margin-bottom:0;}
+  .msg-content strong{color:var(--text);font-weight:500;}
+  .msg-content code{font-family:'DM Mono',monospace;font-size:12px;background:var(--bg3);padding:1px 5px;border-radius:3px;color:#7da5ff;}
+  .msg-ai .msg-content{color:var(--text);}
+  .system-msg{text-align:center;font-size:11px;color:var(--text3);font-family:'DM Mono',monospace;padding:4px 0;}
+  .input-area{padding:16px 20px;border-top:1px solid var(--border);background:var(--bg2);}
+  .input-name-row{display:flex;gap:8px;margin-bottom:8px;align-items:center;}
+  .input-name-row label{font-size:11px;color:var(--text3);font-family:'DM Mono',monospace;white-space:nowrap;}
+  .name-select{background:var(--bg3);border:1px solid var(--border2);border-radius:6px;color:var(--text);font-size:12px;padding:4px 8px;font-family:'DM Sans',sans-serif;outline:none;cursor:pointer;}
+  .name-select:focus{border-color:var(--accent);}
+  .input-row{display:flex;gap:8px;align-items:flex-end;}
+  .msg-input{flex:1;background:var(--bg3);border:1px solid var(--border2);border-radius:10px;color:var(--text);font-size:14px;font-family:'DM Sans',sans-serif;padding:10px 14px;resize:none;outline:none;min-height:42px;max-height:120px;line-height:1.5;transition:border-color .2s;}
+  .msg-input::placeholder{color:var(--text3);}
+  .msg-input:focus{border-color:var(--accent);}
+  .send-btn{width:42px;height:42px;background:var(--accent);border:none;border-radius:10px;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s,transform .1s;flex-shrink:0;}
+  .send-btn:hover{background:var(--accent2);}
+  .send-btn:active{transform:scale(0.96);}
+  .send-btn:disabled{background:var(--bg3);cursor:not-allowed;}
+  .send-btn svg{width:18px;height:18px;}
+  .typing-indicator{display:flex;gap:4px;align-items:center;padding:6px 0;}
+  .typing-dot{width:6px;height:6px;border-radius:50%;background:var(--accent);animation:typing 1.2s ease-in-out infinite;}
+  .typing-dot:nth-child(2){animation-delay:.2s;}
+  .typing-dot:nth-child(3){animation-delay:.4s;}
+  @keyframes typing{0%,60%,100%{transform:translateY(0);opacity:.4}30%{transform:translateY(-4px);opacity:1}}
+  .quick-questions{padding:0 20px 12px;display:flex;flex-wrap:wrap;gap:6px;}
+  .quick-btn{font-size:12px;padding:5px 10px;border-radius:6px;border:1px solid var(--border2);background:transparent;color:var(--text2);cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s;}
+  .quick-btn:hover{border-color:var(--accent);color:var(--text);background:var(--accent-glow);}
+  .sidebar::-webkit-scrollbar{width:4px;}
+  .sidebar::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
+  @media(max-width:640px){.sidebar{display:none;}}
 </style>
 </head>
 <body>
@@ -123,9 +117,13 @@
       <div class="sidebar-label">Equipe do Projeto</div>
       <div class="member"><div class="member-avatar av-j">JU</div><div class="member-info"><div class="member-name">Jurandyr</div><div class="member-role">Decisão e estratégia</div></div><div class="status-indicator online"></div></div>
       <div class="member"><div class="member-avatar av-r">RA</div><div class="member-info"><div class="member-name">Raphaela</div><div class="member-role">Gerência financeira</div></div><div class="status-indicator online"></div></div>
+      <div class="member"><div class="member-avatar av-ai2">AI</div><div class="member-info"><div class="member-name">Aione</div><div class="member-role">Auxiliar financeira</div></div><div class="status-indicator online"></div></div>
+      <div class="member"><div class="member-avatar av-ri">RI</div><div class="member-info"><div class="member-name">Raphael Ion</div><div class="member-role">Fiscal · Admin/AGE</div></div><div class="status-indicator online"></div></div>
       <div class="member"><div class="member-avatar av-u">UL</div><div class="member-info"><div class="member-name">Ulisses</div><div class="member-role">Treinamento / Contábil</div></div><div class="status-indicator online"></div></div>
       <div class="member"><div class="member-avatar av-b">BI</div><div class="member-info"><div class="member-name">Biel</div><div class="member-role">Diretoria</div></div><div class="status-indicator online"></div></div>
       <div class="member"><div class="member-avatar av-t">TO</div><div class="member-info"><div class="member-name">Toy</div><div class="member-role">Diretoria</div></div><div class="status-indicator online"></div></div>
+      <div class="member"><div class="member-avatar av-ad">AD</div><div class="member-info"><div class="member-name">Adriano</div><div class="member-role">Gerente · Suape</div></div><div class="status-indicator online"></div></div>
+      <div class="member"><div class="member-avatar av-it">IT</div><div class="member-info"><div class="member-name">Itamar</div><div class="member-role">Expeditor · Porto Recife</div></div><div class="status-indicator online"></div></div>
       <div class="member"><div class="member-avatar av-ai">AI</div><div class="member-info"><div class="member-name">Assistente IA</div><div class="member-role">Gemini · contexto do projeto</div></div><div class="status-indicator ai-online"></div></div>
     </div>
     <div class="sidebar-section">
@@ -195,9 +193,13 @@
         <select class="name-select" id="userName">
           <option value="Jurandyr">Jurandyr</option>
           <option value="Raphaela">Raphaela</option>
+          <option value="Aione">Aione</option>
+          <option value="Raphael Ion">Raphael Ion</option>
           <option value="Ulisses">Ulisses</option>
           <option value="Biel">Biel</option>
           <option value="Toy">Toy</option>
+          <option value="Adriano">Adriano</option>
+          <option value="Itamar">Itamar</option>
         </select>
       </div>
       <div class="input-row">
@@ -210,61 +212,69 @@
   </main>
 </div>
 <script>
-const CONTEXT = `Você é o assistente de IA do grupo de trabalho da EBTRANS LOGÍSTICA LTDA para o projeto de Reestruturação Financeiro e Migração de TMS. Responda sempre em português brasileiro de forma objetiva e prática.
+const CONTEXT = `Voce e o assistente de IA do grupo de trabalho da EBTRANS LOGISTICA LTDA para o projeto de Reestruturacao Financeiro e Migracao de TMS. Responda sempre em portugues brasileiro de forma objetiva e pratica.
 
-EMPRESA: EBTRANS LOGÍSTICA LTDA
-- CNPJ: 11.995.604/0001-31 | IE: 39988783 | RNTRC: 47631337
-- Regime: Lucro Real Não Cumulativo | Matriz: Cabo (PE) | Filiais: Cabedelo, Candeias, Recife
-- BB: Agência 7-8 / Conta 48777-5 / Gerente: Núbia Rafaela
-- Seguradora: SOMPO | Apólices RCTR-C: 5400055163 / RCF-DC: 5500029429 | Vigência até 30/11/2026 | Cobertura R$ 2,5M
+EMPRESA: EBTRANS LOGISTICA LTDA
+CNPJ: 11.995.604/0001-31 | IE: 39988783 | RNTRC: 47631337
+Regime: Lucro Real Nao Cumulativo | Matriz: Cabo (PE) | Filiais: Cabedelo, Candeias, Recife
+BB: Agencia 7-8 / Conta 48777-5 / Gerente: Nubia Rafaela
+Seguradora: SOMPO | Apolices RCTR-C: 5400055163 / RCF-DC: 5500029429 | Vigencia ate 30/11/2026 | Cobertura R$ 2,5M
 
-MIGRAÇÃO: GW TMS → BSoft TMS (BTRANS INFORMÁTICA LTDA). Operação paralela até equipe estar segura. BSoft custa menos de 1/3 do GW.
+MIGRACAO: GW TMS para BSoft TMS (BTRANS INFORMATICA LTDA). Operacao paralela ate equipe estar segura. BSoft custa menos de 1/3 do GW.
 
-MOTIVAÇÕES: integração bancária nativa, integração Alterdata/AGE, fechamento VIRA por operação, reforma tributária, controle gerencial em tempo real, IA e automação.
-
-EQUIPE: Jurandyr (proprietário/estratégia), Raphaela (gerência financeira pós-migração), Ulisses (treinamento/contábil), Biel e Toy (diretoria), AGE Consulting/Sérgio Costa (contabilidade Alterdata cód. 34801), Luize (contato BSoft).
+EQUIPE DO PROJETO:
+- Jurandyr: proprietario, decisao e visao estrategica
+- Raphaela: assumira a gerencia financeira apos a migracao
+- Aione: auxiliar financeira, atua abaixo da Raphaela
+- Raphael Ion: ponta fiscal, elo entre o administrativo-financeiro e a AGE (contabilidade)
+- Ulisses: treinamento e transicao, conhece GW atual, background contabil
+- Biel e Toy: alinhamento de diretoria
+- Adriano: gerente da unidade de Suape
+- Itamar: expeditor da unidade Porto Recife
+- AGE Consulting / Sergio Costa: contabilidade, sistema Alterdata, codigo empresa 34801
+- Luize (BSoft): contato principal na fornecedora
 
 STATUS:
-✅ Contrato BSoft assinado
-✅ AGE confirmou integração Alterdata (30+ contas mapeadas)
-✅ Layout importação Alterdata→BSoft confirmado como viável
-✅ Formulário coleta v5 parcialmente enviado
-✅ Manual BSoft lido integralmente
-⏳ Aguardando cronograma de treinamento da BSoft
+OK - Contrato BSoft assinado
+OK - AGE confirmou integracao Alterdata, 30+ contas mapeadas
+OK - Layout importacao Alterdata para BSoft confirmado como viavel
+OK - Formulario coleta v5 parcialmente enviado
+OK - Manual BSoft lido integralmente
+AGUARDANDO - Cronograma de treinamento da BSoft
 
-PENDÊNCIAS CRÍTICAS (bloqueiam envio final para Luize/BSoft):
-1. Dados BB para boleto: Cedente, Convênio, Carteira (obter com Núbia)
+PENDENCIAS CRITICAS que bloqueiam envio final para Luize/BSoft:
+1. Dados BB para boleto: Cedente, Convenio, Carteira (obter com Nubia)
 2. AT&M da SOMPO
 3. Dados de NFS-e
 
-PRIORIDADES BSoft: Controle de Viagens e Financeiro logo após módulo Transportes.
-
-MÓDULOS BSoft (manual estudado):
-- Importação cadastros: motoristas CSV 39 campos UTF-8 sep ";", veículos CSV 27 campos
+MODULOS BSoft estudados:
+- Importacao cadastros: motoristas CSV 39 campos UTF-8, veiculos CSV 27 campos
 - Controle de Viagens: hub VIRA com receitas, despesas, adiantamentos, resultado por viagem
-- Contrato de Frete: RPA, CIOT via efrete, Vale-Pedágio
-- Conciliação OFX: regras automáticas por tag MEMO
-- Integração contábil: TXT para Alterdata (conta pelo fornecedor, data pelo lançamento)
-- Faturamento: agrupamento CT-es com condição de pagamento
+- Contrato de Frete: RPA, CIOT via efrete, Vale-Pedagio
+- Conciliacao OFX: regras automaticas por tag MEMO
+- Integracao contabil: TXT para Alterdata
+- Faturamento: agrupamento CT-es com condicao de pagamento
 - App BSoft TMS Gestor: acompanhamento gerencial mobile
 
-AUTOMAÇÕES PLANEJADAS: migração GW→BSoft via Excel→CSV, despesas cartão via foto/XML email, Cowork operando GW e BSoft simultaneamente.
-
-PRÓXIMOS PASSOS:
-1. Completar formulário (BB, AT&M, NFS-e) → enviar para Luize
+PROXIMOS PASSOS:
+1. Completar formulario (BB, AT&M, NFS-e) e enviar para Luize
 2. Aguardar cronograma BSoft
-3. Montar plano de ação com papéis por membro
-4. Instalar Claude Desktop + Cowork
-5. Configurar plugin Migração GW→BSoft
+3. Montar plano de acao com papeis por membro
+4. Instalar Claude Desktop e Cowork
+5. Configurar plugin Migracao GW para BSoft
 
-COMPORTAMENTO: Trate os membros pelo nome. Seja objetivo e prático — equipe operacional. Mostre status claro quando perguntado. Oriente sobre BSoft com base no manual estudado. Responda como colega experiente da equipe.`;
+COMPORTAMENTO: Trate os membros pelo nome. Seja objetivo e pratico. Mostre status claro quando perguntado. Oriente sobre BSoft com base no manual estudado. Responda como colega experiente da equipe.`;
 
 const avatarMap = {
-  Jurandyr: { cls: 'av-j', initials: 'JU' },
-  Raphaela: { cls: 'av-r', initials: 'RA' },
-  Ulisses:  { cls: 'av-u', initials: 'UL' },
-  Biel:     { cls: 'av-b', initials: 'BI' },
-  Toy:      { cls: 'av-t', initials: 'TO' },
+  'Jurandyr':    { cls: 'av-j',   initials: 'JU' },
+  'Raphaela':    { cls: 'av-r',   initials: 'RA' },
+  'Aione':       { cls: 'av-ai2', initials: 'AI' },
+  'Raphael Ion': { cls: 'av-ri',  initials: 'RI' },
+  'Ulisses':     { cls: 'av-u',   initials: 'UL' },
+  'Biel':        { cls: 'av-b',   initials: 'BI' },
+  'Toy':         { cls: 'av-t',   initials: 'TO' },
+  'Adriano':     { cls: 'av-ad',  initials: 'AD' },
+  'Itamar':      { cls: 'av-it',  initials: 'IT' },
 };
 
 let history = [];
@@ -276,11 +286,11 @@ function getNow() {
 function appendMsg(author, content, isAI = false) {
   const messages = document.getElementById('messages');
   const div = document.createElement('div');
-  div.className = `msg${isAI ? ' msg-ai' : ''}`;
+  div.className = 'msg' + (isAI ? ' msg-ai' : '');
   const av = isAI
-    ? `<div class="msg-avatar av-ai">AI</div>`
-    : `<div class="msg-avatar ${avatarMap[author]?.cls || 'av-j'}">${avatarMap[author]?.initials || author[0]}</div>`;
-  div.innerHTML = `${av}<div class="msg-body"><div class="msg-meta"><span class="msg-author" style="color:${isAI ? '#22c55e' : 'var(--text)'}">${isAI ? 'Assistente IA' : author}</span><span class="msg-time">${getNow()}</span></div><div class="msg-content">${formatContent(content)}</div></div>`;
+    ? '<div class="msg-avatar av-ai">AI</div>'
+    : '<div class="msg-avatar ' + (avatarMap[author]?.cls || 'av-j') + '">' + (avatarMap[author]?.initials || author[0]) + '</div>';
+  div.innerHTML = av + '<div class="msg-body"><div class="msg-meta"><span class="msg-author" style="color:' + (isAI ? '#22c55e' : 'var(--text)') + '">' + (isAI ? 'Assistente IA' : author) + '</span><span class="msg-time">' + getNow() + '</span></div><div class="msg-content">' + formatContent(content) + '</div></div>';
   messages.appendChild(div);
   messages.scrollTop = messages.scrollHeight;
 }
@@ -290,6 +300,7 @@ function formatContent(text) {
     .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
     .replace(/`(.*?)`/g, '<code>$1</code>')
     .replace(/\n\n/g, '</p><p>')
+    .replace(/\n- /g, '<br>• ')
     .replace(/\n/g, '<br>') + '</p>';
 }
 
@@ -297,15 +308,15 @@ function showTyping() {
   const messages = document.getElementById('messages');
   const div = document.createElement('div');
   div.className = 'msg msg-ai'; div.id = 'typing';
-  div.innerHTML = `<div class="msg-avatar av-ai">AI</div><div class="msg-body"><div class="msg-meta"><span class="msg-author" style="color:#22c55e">Assistente IA</span><span class="msg-time">digitando...</span></div><div class="typing-indicator"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div></div>`;
+  div.innerHTML = '<div class="msg-avatar av-ai">AI</div><div class="msg-body"><div class="msg-meta"><span class="msg-author" style="color:#22c55e">Assistente IA</span><span class="msg-time">digitando...</span></div><div class="typing-indicator"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div></div>';
   messages.appendChild(div);
   messages.scrollTop = messages.scrollHeight;
 }
 
-function removeTyping() { const t = document.getElementById('typing'); if (t) t.remove(); }
+function removeTyping() { var t = document.getElementById('typing'); if (t) t.remove(); }
 
 async function callGemini(userMessage, userName) {
-  history.push({ role: 'user', parts: [{ text: `[${userName}]: ${userMessage}` }] });
+  history.push({ role: 'user', parts: [{ text: '[' + userName + ']: ' + userMessage }] });
   const response = await fetch(
     'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=AIzaSyBKWqoZ7TwFqarxO6A3-KrUcqwODXJkGTU',
     {
@@ -318,7 +329,7 @@ async function callGemini(userMessage, userName) {
     }
   );
   const data = await response.json();
-  const reply = data.candidates?.[0]?.content?.parts?.[0]?.text || 'Erro ao obter resposta.';
+  const reply = (data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts && data.candidates[0].content.parts[0] && data.candidates[0].content.parts[0].text) || 'Erro ao obter resposta.';
   history.push({ role: 'model', parts: [{ text: reply }] });
   return reply;
 }
@@ -339,7 +350,7 @@ async function sendMessage() {
     appendMsg('IA', reply, true);
   } catch (e) {
     removeTyping();
-    appendMsg('IA', 'Erro de conexão. Verifique sua internet e tente novamente.', true);
+    appendMsg('IA', 'Erro de conexao. Verifique sua internet e tente novamente.', true);
   }
   document.getElementById('sendBtn').disabled = false;
   input.focus();
